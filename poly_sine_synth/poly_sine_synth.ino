@@ -5,14 +5,14 @@
 #include <SerialFlash.h>
 
 // GUItool: begin automatically generated code
-AudioSynthWaveform waveform1, waveform2, waveform3, waveform4; // First 4 voices
-AudioSynthWaveform waveform5, waveform6, waveform7, waveform8; // Next 4 voices
-AudioEffectEnvelope envelope1, envelope2, envelope3, envelope4; // Envelopes for first 4 voices
-AudioEffectEnvelope envelope5, envelope6, envelope7, envelope8; // Envelopes for next 4 voices
-AudioMixer4 mixer1; // Combines envelope1-4
-AudioMixer4 mixer2; // Combines envelope5-8
-AudioMixer4 mixer3; // Final mix of mixer1 and mixer2
-AudioOutputAnalog dac1; // Analog output
+AudioSynthWaveform waveform1, waveform2, waveform3, waveform4;
+AudioSynthWaveform waveform5, waveform6, waveform7, waveform8;
+AudioEffectEnvelope envelope1, envelope2, envelope3, envelope4;
+AudioEffectEnvelope envelope5, envelope6, envelope7, envelope8;
+AudioMixer4 mixer1;
+AudioMixer4 mixer2;
+AudioMixer4 mixer3;
+AudioOutputAnalog dac1;
 AudioConnection patchCord1(waveform1, envelope1);
 AudioConnection patchCord2(waveform2, envelope2);
 AudioConnection patchCord3(waveform3, envelope3);
@@ -59,7 +59,7 @@ void setup() {
   // configure all oscillators
   for (int i = 0; i < MAX_VOICES; i++) {
     voices[i].osc->begin(WAVEFORM_SAWTOOTH);
-    voices[i].osc->amplitude(0.25);
+    voices[i].osc->amplitude(1);
 
     // configure envelopes
     voices[i].env->attack(50);
