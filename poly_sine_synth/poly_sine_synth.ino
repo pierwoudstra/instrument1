@@ -12,6 +12,7 @@ AudioEffectEnvelope envelope5, envelope6, envelope7, envelope8;
 AudioMixer4 mixer1;
 AudioMixer4 mixer2;
 AudioMixer4 mixer3;
+AudioOutputPT8211 pt8211_1;
 AudioOutputAnalog dac1;
 AudioConnection patchCord1(waveform1, envelope1);
 AudioConnection patchCord2(waveform2, envelope2);
@@ -31,7 +32,7 @@ AudioConnection patchCord15(envelope7, 0, mixer2, 2);
 AudioConnection patchCord16(envelope8, 0, mixer2, 3);
 AudioConnection patchCord17(mixer1, 0, mixer3, 0);
 AudioConnection patchCord18(mixer2, 0, mixer3, 1);
-AudioConnection patchCord19(mixer3, dac1);
+AudioConnection patchCord19(mixer3, pt8211_1);
 // GUItool: end automatically generated code
 
 // maximum polyphony
@@ -47,10 +48,14 @@ struct Voice {
 
 // array of voices
 Voice voices[MAX_VOICES] = {
-    {false, 0, &waveform1, &envelope1}, {false, 0, &waveform2, &envelope2},
-    {false, 0, &waveform3, &envelope3}, {false, 0, &waveform4, &envelope4},
-    {false, 0, &waveform5, &envelope5}, {false, 0, &waveform6, &envelope6},
-    {false, 0, &waveform7, &envelope7}, {false, 0, &waveform8, &envelope8},
+  { false, 0, &waveform1, &envelope1 },
+  { false, 0, &waveform2, &envelope2 },
+  { false, 0, &waveform3, &envelope3 },
+  { false, 0, &waveform4, &envelope4 },
+  { false, 0, &waveform5, &envelope5 },
+  { false, 0, &waveform6, &envelope6 },
+  { false, 0, &waveform7, &envelope7 },
+  { false, 0, &waveform8, &envelope8 },
 };
 
 void setup() {
@@ -59,7 +64,7 @@ void setup() {
   // configure all oscillators
   for (int i = 0; i < MAX_VOICES; i++) {
     voices[i].osc->begin(WAVEFORM_SINE);
-    voices[i].osc->amplitude(1);
+    voices[i].osc->amplitude(0.3);
 
     // configure envelopes
     voices[i].env->attack(50);

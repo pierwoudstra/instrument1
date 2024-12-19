@@ -58,7 +58,7 @@ public:
 
   // utility
   int ms_to_samps(float ms) {
-    return (int)(ms * (44100 / 1000));
+    return (int)(ms * 44.1);
   }
 
 private:
