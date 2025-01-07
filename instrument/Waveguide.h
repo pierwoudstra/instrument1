@@ -6,6 +6,7 @@
 
 #include "Del.h"
 #include "LPF.h"
+#include "AutoGain.h"
 
 class Waveguide : public AudioStream {
 public:
@@ -22,12 +23,6 @@ public:
     // process audio block
     for (int i = 0; i < AUDIO_BLOCK_SAMPLES; i++) {
       int16_t input_sample = block->data[i];
-      // input_sample *= 16;
-      // if (input_sample < 16000 && input_sample > -16000) {
-      //   input_sample = 0;
-      // } else {
-      //   input_sample = input_sample;
-      // }
 
       int16_t delayed_output = feedback * delay.process(output_sample);
       output_sample = input_sample + (0.7 * filter.process(delayed_output));
@@ -75,4 +70,4 @@ private:
   LPF filter = LPF(0.001);
 };
 
-#endif  //WAVEGUIDE_H
+#endif  // WAVEGUIDE_H

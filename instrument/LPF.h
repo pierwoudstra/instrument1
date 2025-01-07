@@ -6,7 +6,8 @@ class LPF {
 public:
 
   // constructor
-  LPF(float alpha) : alpha(0.01) {
+  LPF(float alpha)
+    : alpha(0.01) {
     this->alpha = alpha;
   }
 
@@ -20,4 +21,4 @@ private:
   float alpha;
 };
 
-#endif  //LPF_H
+#endif  // LPF_H

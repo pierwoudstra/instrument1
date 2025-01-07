@@ -52,7 +52,7 @@ public:
   }
 
 private:
-  inline void wrap_head(int &head) {
+  inline void wrap_head(int& head) {
     if (head > max_delay_size) {
       head -= max_delay_size;
     }
