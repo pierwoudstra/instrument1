@@ -27,6 +27,13 @@ public:
       int16_t delayed_output = feedback * delay.process(output_sample);
       output_sample = input_sample + (0.7 * filter.process(delayed_output));
       output_sample = auto_gain.process(output_sample);
+      
+      // clipping
+      if (output_sample > 32767) {
+        output_sample = 32767;
+      } else if (output_sample < -32768) {
+        output_sample = -32768;
+      }
 
       block->data[i] = (int16_t)output_sample;
     }
