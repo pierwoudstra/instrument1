@@ -1,38 +1,36 @@
-// TODO:
-
-// LERP FIXEN om soortgelijke functie te hebben als rampsmooth
-
+#include <sys/_stdint.h>
 #include <cstring>
 #include <stdint.h>
+#include <math.h>
 #ifndef AUTOGAIN_H
 
-#define BUF_SIZE 100
+#define RMS_BUF_SIZE 4410
 
 class AutoGain {
 public:
   AutoGain() {
     // fill empty rms buffer
-    memset(rms_buffer, 0, sizeof(rms_buffer));
+    memset(rms_buffer, 0.f, sizeof(rms_buffer));
   }
   ~AutoGain() {}
 
   int16_t process(int16_t input) {
 
-    // rms
-    // omzetten naar floats
-    // gain = goal/ rms
-    // lerp
-    // output = input * gain
-
     // fill buffer
-    rms_buffer[write_head] = input;
-    write_head++;
-    wrap_head(write_head);  // wrap head & compute rms
+    rms_buffer[write_head_rms] = int16_t_to_float(input);
+    write_head_rms++;
+    wrap_head_rms(write_head_rms);  // wrap head & compute rms
 
     // interpolate between old gain value & computed new gain value
-    gain = lerp(gain, (goal_volume / input_amp), 0.5f);
+    // final_gain = (final_gain + (goal_volume / input_amp)) / 2;
+    // final_gain = goal_volume / input_amp;
 
-    return (int16_t)(input * gain);
+    return (int16_t)(input * final_gain);
+  }
+
+  int16_t process_soft_clipper(int16_t input) {
+    float output = tanh( int16_t_to_float(input) );
+    return float_to_int16_t(output);
   }
 
 private:
@@ -40,7 +38,7 @@ private:
   // utility
 
   float int16_t_to_float(int16_t input) {
-    float output = (float)input / 32767.f;
+    float output = (float)input / 32768.f;
     return output;
   }
 
@@ -49,14 +47,19 @@ private:
     return output;
   }
 
-  int16_t rms(int16_t input[BUF_SIZE]) {
-    int16_t output = 0;
-    for (int i = 0; i < BUF_SIZE; i++) {
-      output += pow(input[i], 2);
+  float rms(float input[RMS_BUF_SIZE]) {
+    float output = 0;
+    for (int i = 0; i < RMS_BUF_SIZE; i++) {
+      output += abs(input[i]);
     }
-    output *= 0.01;
-    output = sqrt(output);
-    return (int16_t)output;
+    output *= 1.f / (float)RMS_BUF_SIZE;
+
+    // Serial.println(output);
+    // Serial.println("gain:");
+    // Serial.println(final_gain);
+
+
+    return (float)output;
   }
 
   float lerp(float a, float b, float f) {
@@ -66,21 +69,22 @@ private:
     return (a * (1.f - f)) + (b * f);
   }
 
-  inline void wrap_head(int& head) {
-    if (head > BUF_SIZE) {
-      head -= BUF_SIZE;
+  inline void wrap_head_rms(int& head) {
+    if (head == RMS_BUF_SIZE) {
+      head = 0;
       // if wrap head is at end of buffer
       // then compute rms value
-      input_amp = int16_t_to_float(rms(rms_buffer));
+      input_amp = 20 * rms(rms_buffer);
+      Serial.println(goal_volume / input_amp);
     }
   }
 
   // fields
-  int16_t rms_buffer[BUF_SIZE];
-  float gain = 0.f;
+  float rms_buffer[RMS_BUF_SIZE];
+  float final_gain = 1.f;
   float goal_volume = 0.5f;
   float input_amp;
-  int write_head = 0;
+  int write_head_rms = 0;
 };
 
 #endif  // AUTOGAIN_H
