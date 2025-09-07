@@ -77,7 +77,7 @@ void setup() {
   // configure all oscillators
   for (int i = 0; i < MAX_VOICES; i++) {
     voices[i].osc->begin(WAVEFORM_SINE);
-    voices[i].osc->amplitude(0.3);
+    voices[i].osc->amplitude(0.7);
 
     // configure envelopes
     voices[i].env->attack(50);

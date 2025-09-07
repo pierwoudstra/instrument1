@@ -82,7 +82,7 @@ private:
   // fields
   float rms_buffer[RMS_BUF_SIZE];
   float final_gain = 1.f;
-  float goal_volume = 0.2f;
+  float goal_volume = 0.5f;
   float input_amp;
   int write_head_rms = 0;
 };

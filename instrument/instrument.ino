@@ -6,18 +6,25 @@
 // GUItool: begin automatically generated code
 AudioInputAnalog adc1;
 Waveguide waveguide;
+
+AudioFilterStateVariable filter1;        //xy=234.13043212890625,311.13043212890625
+
 AudioOutputAnalog dac1;
 AudioOutputPT8211 pt8211_1;
 
 // connect objects
 AudioConnection patchCord1(adc1, 0, waveguide, 0);
-AudioConnection patchCord2(waveguide, 0, pt8211_1, 0);
+AudioConnection patchCord2(waveguide, 0, filter1, 0);
+
+AudioConnection patchCord3(filter1, 0, pt8211_1, 0);
 // GUItool: end automatically generated code
 
 void setup() {
   AudioMemory(12);
 
   waveguide.set_note(36);
+
+  filter1.frequency(900);
 
   // midi handler
   usbMIDI.setHandleNoteOn(note_on);

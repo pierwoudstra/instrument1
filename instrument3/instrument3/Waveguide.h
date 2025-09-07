@@ -70,7 +70,7 @@ private:
   int16_t output_sample = 0;  // first output sample
 
   Del delay = Del(5000, 20, 0);
-  LPF filter = LPF(0.0001);
+  LPF filter = LPF(0.001);
   AutoGain auto_gain = AutoGain();
 };
 
